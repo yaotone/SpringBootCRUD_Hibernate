@@ -1,47 +1,44 @@
 package ru.yaotone.hibernateproj.HiberDAOImpl;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yaotone.hibernateproj.model.User;
-import ru.yaotone.hibernateproj.repository.UserRepository;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class HiberDAO {
-    private final UserRepository userRepository;
 
-    @Transactional(readOnly = true)
+    private final EntityManager entityManager;
+
     public List<User> showUsers() {
-        return userRepository.findAll();
+        return entityManager.createQuery("FROM User", User.class).getResultList();
     }
 
-    @Transactional(readOnly = true)
     public User showUser(Long id) {
-        return userRepository.getOne(id);
+        return entityManager.createQuery("FROM User WHERE id=:id", User.class)
+                .setParameter("id", id).getSingleResult();
     }
 
-    @Transactional
     public void addUser(User user) {
-        userRepository.save(user);
+        entityManager.persist(user);
     }
 
-    @Transactional
     public void updateUser(User updatedUser, Long id) {
-        User user = userRepository.findById(id).orElse(null);
-
-        assert user != null;
-        user.setName(updatedUser.getName());
-        user.setSurname(updatedUser.getSurname());
-        user.setAge(updatedUser.getAge());
-
-        userRepository.save(user);
+        entityManager.createQuery("UPDATE User u SET u.name=:name, u.surname=:surname, u.age=:age WHERE u.id=:id")
+                .setParameter("name", updatedUser.getName())
+                .setParameter("surname", updatedUser.getSurname())
+                .setParameter("age", updatedUser.getAge())
+                .setParameter("id", id)
+                .executeUpdate();
     }
 
-    @Transactional
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+        entityManager.createQuery("DELETE FROM User WHERE id=:id")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 }

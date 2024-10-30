@@ -2,13 +2,12 @@ package ru.yaotone.hibernateproj.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.yaotone.hibernateproj.HiberDAOImpl.HiberDAO;
 import ru.yaotone.hibernateproj.model.User;
+import ru.yaotone.hibernateproj.service.UsersService;
 
 
 @Controller
@@ -16,19 +15,19 @@ import ru.yaotone.hibernateproj.model.User;
 @AllArgsConstructor
 public class UsersController {
 
-    private final HiberDAO hiberDAO;
+    private final UsersService usersService;
 
 
     @GetMapping("")
     public String index(Model model) {
-        model.addAttribute("Users", hiberDAO.showUsers());
+        model.addAttribute("Users", usersService.getAllUsers());
 
         return "/users/index";
     }
 
     @GetMapping("/{id}")
     public String showUser(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", hiberDAO.showUser(id));
+        model.addAttribute("user", usersService.getUserById(id));
 
         return "/users/showUser";
     }
@@ -45,14 +44,14 @@ public class UsersController {
         }
 
 
-        hiberDAO.addUser(user);
+        usersService.addUser(user);
 
         return "redirect:/users";
     }
 
     @GetMapping("{id}/update")
     public String update(@PathVariable("id")Long id, Model model) {
-        model.addAttribute("user", hiberDAO.showUser(id));
+        model.addAttribute("user", usersService.getUserById(id));
 
         return "/users/update";
     }
@@ -64,13 +63,13 @@ public class UsersController {
             return "/users/update";
         }
 
-        hiberDAO.updateUser(user, id);
+        usersService.updateUser(user, id);
         return "redirect:/users";
     }
 
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
-        hiberDAO.deleteUser(id);
+        usersService.deleteUser(id);
 
         return "redirect:/users";
     }
