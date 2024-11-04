@@ -2,14 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Edit user</title>
+    <title>Authentication</title>
     <link href="/styles/create.css" rel="stylesheet">
+    <link href="/styles/auth.css" rel="stylesheet">
 </head>
 <body>
 
-<div class="form_card">
 
-  <form th:method="PATCH" th:action="@{/users/{id}(id=${user.getId()})}" th:object="${user}">
+<div class="form_card">
+    <div class="form_name">Registration</div>
+
+  <form th:method="POST" th:action="@{/users/register}" th:object="${user}" id="reg_form">
 
     <div class="input_container">
       <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
@@ -29,10 +32,17 @@
       <input class="input_field" type="text" name="email" id="email" th:field="*{email}">
     </div>
 
-    <input class="submit_button" type="submit" value="update">
+      <div class="input_container">
+          <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+          <label for="reg_password">Password: </label>
+          <input class="input_field" type="password" name="password" id="reg_password" th:field="*{password}">
+      </div>
+
+    <a th:href="@{/login}" class="to_other_form">Already have an account? Login</a>
+
+    <input type="submit" class="submit_button" value="Register" >
 
   </form>
-
 </div>
 
 

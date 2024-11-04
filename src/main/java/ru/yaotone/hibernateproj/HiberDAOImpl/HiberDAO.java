@@ -1,13 +1,14 @@
 package ru.yaotone.hibernateproj.HiberDAOImpl;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.yaotone.hibernateproj.model.User;
 
 import java.util.List;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class HiberDAO {
 
@@ -22,15 +23,26 @@ public class HiberDAO {
                 .setParameter("id", id).getSingleResult();
     }
 
+    public User showUserByEmail(String email) {
+        User ans = null;
+        try {
+            ans = entityManager.createQuery("FROM User u where u.email=:email", User.class)
+                    .setParameter("email", email).getSingleResult();
+        }catch (NoResultException e) {
+            System.out.println(e.getMessage());
+        }
+        return ans;
+    }
+
     public void addUser(User user) {
         entityManager.persist(user);
     }
 
     public void updateUser(User updatedUser, Long id) {
-        entityManager.createQuery("UPDATE User u SET u.name=:name, u.surname=:surname, u.age=:age WHERE u.id=:id")
+        entityManager.createQuery("UPDATE User u SET u.name=:name, u.surname=:surname, u.email=:email WHERE u.id=:id")
                 .setParameter("name", updatedUser.getName())
                 .setParameter("surname", updatedUser.getSurname())
-                .setParameter("age", updatedUser.getAge())
+                .setParameter("email", updatedUser.getEmail())
                 .setParameter("id", id)
                 .executeUpdate();
     }

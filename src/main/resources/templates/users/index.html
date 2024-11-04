@@ -7,9 +7,21 @@
 </head>
 <body>
 
+    <div class="header">
+        <div class="left">
+            <div class="name" th:text="${currentUser.getName()}"></div>
+            <div class="email" th:text="${currentUser.getEmail()}"></div>
+        </div>
+        <div class="right">
+            <form th:action="@{/logout}" method="post">
+                <button class="create_user_button" style="background: blueviolet" type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+
     <div class="table_actions">
         <div class="table_name">Все пользователи</div>
-        <a th:href="@{/users/create}" class="create_user_button">Добавить</a>
+
     </div>
 
     <table>
@@ -18,7 +30,8 @@
             <th class="centred" style="min-width: 48px;">id</th>
             <th >Name</th>
             <th >Surname</th>
-            <th class="centred">Age</th>
+            <th>Email</th>
+            <th>Roles</th>
             <th class="centred" style="min-width: 100px;">Изменить</th>
             <th class="centred" style="min-width: 100px;">Удалить</th>
         </tr>
@@ -28,7 +41,10 @@
             <td class="centred" style="min-width: 48px;" th:text="${user.getId()}">1</td>
             <td th:text="${user.getName()}"></td>
             <td th:text="${user.getSurname()}"></td>
-            <td class="centred" th:text="${user.getAge()}">12</td>
+            <td th:text="${user.getEmail()}">12</td>
+            <td class="roles_column">
+                <div th:each="authority : ${user.getAuthorities()}" th:text="${authority.getName()}"></div>
+            </td>
             <td class="centred" style="min-width: 100px;" id="edit_button">
                 <a class="action_button change"
                     th:onclick="'window.location.href =\'/users/'+ ${user.getId()} +'/update\';'">Изменить</a></td>

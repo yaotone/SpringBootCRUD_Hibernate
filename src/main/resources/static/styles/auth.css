@@ -1,0 +1,28 @@
+.form_name{
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 40px;
+    font-weight: 600;
+    color: #6b4cff;
+}
+
+.form_card{
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden{
+    display: none;
+}
+
+.to_other_form{
+    margin-left: auto;
+    margin-right: auto;
+    color: #2a00ff;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.to_other_form:hover{
+    color: #160095;
+}

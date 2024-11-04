@@ -1,12 +1,13 @@
 package ru.yaotone.hibernateproj.DTO;
 
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class UserDTO {
+public class UpdateUserDTO {
     private Long id;
 
     @NotEmpty(message = "Строка не должна быть пустой")
@@ -24,9 +25,4 @@ public class UserDTO {
     @Size(min = 4, message = "Почта должна быть длиннее 4 символов")
     @Size(max = 30, message = "Почта должна быть короче 30 символов")
     private String email;
-
-    @NotEmpty(message = "Строка не должна быть пустой")
-    @Size(min = 8, message = "Пароль должна быть длиннее 8 символов")
-    @Size(max = 30, message = "Пароль должна быть короче 30 символов")
-    private String password;
 }
